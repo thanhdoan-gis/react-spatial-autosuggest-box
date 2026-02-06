@@ -5,16 +5,18 @@ import type { AutosuggestSuggestion } from '@what3words/api';
 interface AutosuggestProps {
   onSelect: (value: string) => void;
   placeholder?: string;
-  apiKey:string;
+  apiKey: string;
+  debounceMs?: number
 }
 
 export default function Autosuggest({
   onSelect,
   placeholder = 'e.g. filled.count.soap',
-  apiKey
+  apiKey,
+  debounceMs
 }: AutosuggestProps) {
   const [input, setInput] = useState('');
-  const { suggestions, isLoading, error } = useAutosuggest(input,apiKey);
+  const { suggestions, isLoading, error } = useAutosuggest(input, apiKey, debounceMs);
   const [isOpen, setIsOpen] = useState(false);
   const [isValidated, setIsValidated] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -59,10 +61,10 @@ export default function Autosuggest({
   };
   const stateIcon = () => {
     if (isValidated) {
-      return <span className={`w-5 h-5 bg-center bg-no-repeat bg-[url(./check.svg)]`}></span>
+      return <span className={`w-5 h-5 bg-center bg-no-repeat bg-[url(./check.svg)]`} data-testid="confirmation-icon"></span>
     } else if (isLoading) {
       return <span className={`w-5 h-5 rounded-full border border-[#000_transparent_#000_transparent] animate-spin`}></span>
-      
+
     }
   }
   return (

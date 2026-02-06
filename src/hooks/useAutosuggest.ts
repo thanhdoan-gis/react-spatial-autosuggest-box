@@ -2,13 +2,15 @@ import { useState, useEffect, useCallback } from 'react';
 import debounce from 'lodash.debounce';
 import what3words, {
   ApiVersion,
-  Transport,
-  What3wordsService,
   axiosTransport,
+} from '@what3words/api';
+import type {
+  What3wordsService,
+  Transport,
   AutosuggestSuggestion
 } from '@what3words/api';
 
-
+// init const config for w3wService Client
 const config: {
   host: string;
   apiVersion: ApiVersion;
@@ -17,15 +19,11 @@ const config: {
   apiVersion: ApiVersion.Version3,
 };
 
-// Initialize the API client
+const transport: Transport = axiosTransport();
+const w3wServiceClient: What3wordsService = what3words('', config, { transport });
 
-  const transport: Transport = axiosTransport();
-  const w3wServiceClient: What3wordsService = what3words('', config, { transport });
-
-export const useAutosuggest = (userInput: string, apiKey: string) => {
-  w3wServiceClient.setApiKey(apiKey);
-  w3wServiceClient.setConfig(config);
-
+export const useAutosuggest = (userInput: string, apiKey: string, debounceMs = 300) => {
+  w3wServiceClient.setApiKey(apiKey)
   const [suggestions, setSuggestions] = useState<AutosuggestSuggestion[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -57,17 +55,20 @@ export const useAutosuggest = (userInput: string, apiKey: string) => {
         } else {
           setSuggestions([]);
         }
-      } catch (err) {
+      } catch {
         if (!signal.aborted) {
           setError('Failed to fetch suggestions. Please try again.');
-          console.error('W3W API Error:', err);
         }
       } finally {
         if (!signal.aborted) setIsLoading(false);
       }
-    }, 300),
+    }, debounceMs),
     [w3wServiceClient]
   );
+
+  useEffect(() => {
+    w3wServiceClient.setApiKey(apiKey);
+  }, [apiKey]);
 
   useEffect(() => {
     const controller = new AbortController();
