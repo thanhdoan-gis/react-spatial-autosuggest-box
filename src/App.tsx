@@ -9,8 +9,8 @@ function App() {
     <>
       <div className='flex flex-row justify-center'>
         <div className=''>
-          <div className="text-3xl font-bold underline">
-            Hello What3Words!
+          <div className="text-3xl font-bold">
+            Precise 3 Words address finder
           </div>
           <label>what3words address:</label>
           <Autosuggest apiKey={apiKey} onSelect={(value) => setSelectedAddress(value)}></Autosuggest>
