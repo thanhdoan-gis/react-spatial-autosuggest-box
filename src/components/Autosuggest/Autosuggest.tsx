@@ -100,7 +100,7 @@ export default function Autosuggest({
               id={`option-${index}`}
               onClick={() => onSelectAddress(suggestion)}
               aria-selected={index === selectedIndex}
-              className={`px-4 py-2 cursor-pointer flex flex-col not-last:border-b not-last:border-[#c2c2c2] ${index === selectedIndex ? 'bg-slate-100' : 'hover:bg-slate-50'
+              className={` cursor-pointpx-4 py-2er flex flex-col not-last:border-b not-last:border-[#c2c2c2] ${index === selectedIndex ? 'bg-slate-100' : 'hover:bg-slate-50'
                 }`}
             >
               <span className="font-bold text-blue-950"><span className='text-red-800'>///</span>{suggestion.words}</span>

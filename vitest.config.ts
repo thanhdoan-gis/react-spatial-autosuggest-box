@@ -6,5 +6,8 @@ export default defineConfig({
     environment: 'jsdom', // Simulates a browser DOM environment
     setupFiles: "./src/tests/setup.ts",
     exclude: [...configDefaults.exclude, './e2e/**'], // Exclude Playwright tests
+    coverage:{
+      enabled:true,
+    }
   },
 })
